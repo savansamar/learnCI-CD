@@ -4,7 +4,7 @@ import React from 'react'
 const Main = () => {
   return (
     <View style={styles.flex}>
-      <Text>Main</Text>
+      <Text>Main file</Text>
     </View>
   )
 }
