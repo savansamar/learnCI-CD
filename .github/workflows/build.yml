@@ -7,6 +7,7 @@ jobs:
   my_first_job:
     name: My first job
     runs-on: ubuntu-latest
+    needs: my_second_job
     steps:
       - name: Placeholder Step
         run: echo "This job has no steps defined."
@@ -14,6 +15,6 @@ jobs:
   my_second_job:
     name: My second job
     runs-on: ubuntu-latest
-    steps:
+    steps: 
       - name: Placeholder Step
         run: echo "This job also has no steps defined."
