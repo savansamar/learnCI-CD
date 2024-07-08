@@ -25,7 +25,7 @@ jobs:
         id: setup-node
         uses: actions/setup-node@v4
         with:
-          node-version-file: .node-version
+          node-version-file: 18
           cache: npm
 
       - name: Install Dependencies
@@ -55,7 +55,7 @@ jobs:
 
       - name: Test Local Action
         id: test-action
-        uses: ./
+        uses: actions/setup-node@v4
         with:
           milliseconds: 2000
 
