@@ -1,44 +1,11 @@
-name: react-native-android-build-apk
-on:
-  push:
-    branches:
-      - master
+name: A workflow for my Hello World file
+on: push
 jobs:
-  install-and-test:
+  build:
+    name: Hello world action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-       - name: Setup Node  
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'yarn'
-      - name: Install npm dependencies
-        run: |
-          npm install
-  build-android:
-    needs: install-and-test
-    runs-on: ubuntu-latest
-    steps: 
-      - uses: actions/checkout@v4
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Install npm dependencies
-        run: |
-          npm install
-      - name: Build Android Release
-        run: |
-          cd android && ./gradlew assembleRelease
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+    - uses: actions/checkout@v1
+    - uses: ./action-a
+      with:
+        MY_NAME: "Mona"
