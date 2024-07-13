@@ -1,15 +1,36 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+name: Apk Build
+on: ['push','pull_request']
 jobs:
-  first_job:
-  runs-on: ubuntu-latest
-  -uses: actions/checkout@v4
-  -uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-  
-      
+  build-android:
+    runs-on: ubuntu-latest
+    env:
+      commit-hash: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: c-hive/gha-yarn-cache@v1
 
-
-
+      - name: Install node_modules
+        run: |
+          yarn install
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-caches-
+      - name: Make Gradlew Executable
+        run: cd android && chmod +x ./gradlew
+      - name: Build Android Release
+        run: |
+          cd android && ./gradlew assembleRelease
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: 'app-${{ env.commit-hash }}.apk'
+          path: android/app/build/outputs/apk/release/
