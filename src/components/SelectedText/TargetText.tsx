@@ -1,4 +1,10 @@
-import {Dimensions, LayoutChangeEvent, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  LayoutChangeEvent,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React from 'react';
 import Svg, {
   Ellipse,
@@ -22,7 +28,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 interface TargetTextProps {
   text: string;
   highlight?: boolean;
-  highlightedText?:string;
+  highlightedText?: string;
 }
 
 const TargetText = (Props: TargetTextProps) => {
@@ -47,28 +53,27 @@ const TargetText = (Props: TargetTextProps) => {
     strokeDashoffset: PATH_LENGTH * (1 - progress.value),
   }));
 
-const textWidthRef = React.useRef(0);
-const [textWidth, setTextWidth] = React.useState(0);
-const [widthOfText, setWidthOfText] = React.useState<{[key: string]: number}>({});
+  const textWidthRef = React.useRef(0);
+  const [textWidth, setTextWidth] = React.useState(0);
+  const [widthOfText, setWidthOfText] = React.useState<{[key: string]: number}>(
+    {},
+  );
 
-
-const handleLayout = (event: LayoutChangeEvent) => {
-  if (!!Props.highlight) {
-    setWidthOfText({
-      ...widthOfText,
-      [Props.text]: event.nativeEvent.layout.width,
-    });
-    return;
-  }
-};
-
- 
+  const handleLayout = (event: LayoutChangeEvent) => {
+    if (!!Props.highlight) {
+      setWidthOfText({
+        ...widthOfText,
+        [Props.text]: event.nativeEvent.layout.width,
+      });
+      return;
+    }
+  };
 
   return (
     <>
       <Text
         key={`${Props.text + String(Math.random)}`}
-        onLayout={(e)=>handleLayout(e)}
+        onLayout={e => handleLayout(e)}
         style={[styles.defaultTextStyle]}>
         {Props.text}
       </Text>
@@ -81,8 +86,8 @@ const handleLayout = (event: LayoutChangeEvent) => {
           <AnimatedPath
             d={`
                          M 0,0 
-                         C 0,10 40,-10 ${widthOfText[Props?.text]},10
-                         C 100,30 -10,50 5,0 
+                         C 0,10 ${widthOfText[Props?.text] * 0.4},-7 ${widthOfText[Props?.text]},10
+                         C ${widthOfText[Props?.text]},30 ${widthOfText[Props?.text] * 0.1},50 0,0 
                        `}
             fill="none"
             stroke="orange"
@@ -104,5 +109,5 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     letterSpacing: 2,
     lineHeight: 30,
-  }
+  },
 });
